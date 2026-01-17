@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+set -euo pipefail
+shopt -s nullglob
+
+found=0
+
+for f in *.{mkv,mp4,mov,avi,ts,m4v,webm}; do
+  [ -f "$f" ] || continue
+  found=1
+
+  base="${f%.*}"
+  out="${base}.hevc_nvenc.w1920.mkv"
+
+  if [ -e "$out" ]; then
+    echo "Skipping (exists): $out"
+    continue
+  fi
+
+  echo "→ Encoding: $f"
+
+  # Global stream index of FIRST audio stream (a:0)
+  first_a_global="$(ffprobe -v error -select_streams a:0 \
+    -show_entries stream=index -of csv=p=0 "$f" | head -n1 || true)"
+
+  # Channel count of FIRST audio stream (a:0) to choose AC-3 bitrate
+  ch="$(ffprobe -v error -select_streams a:0 \
+    -show_entries stream=channels -of csv=p=0 "$f" | head -n1 || true)"
+  [ -n "${ch:-}" ] || ch=2
+
+  # ~1GB/hour total ≈ 2386 kbps. Allocate remainder to video.
+  if [ "$ch" -gt 2 ]; then
+    ab="384k"
+    vb="2000k"
+  else
+    ab="192k"
+    vb="2200k"
+  fi
+  buf="$(( ${vb%k} * 2 ))k"
+
+  # Build maps for additional English audio streams (exclude first audio stream)
+  # We map by GLOBAL stream index: -map 0:<index>
+  map_extra_audio=()
+  while IFS=',' read -r gidx lang; do
+    [ -n "${gidx:-}" ] || continue
+    [ "${gidx}" = "${first_a_global:-}" ] && continue
+    case "${lang,,}" in
+      eng|en) map_extra_audio+=(-map "0:${gidx}") ;;
+    esac
+  done < <(
+    ffprobe -v error -select_streams a \
+      -show_entries stream=index:stream_tags=language \
+      -of csv=p=0 "$f" 2>/dev/null \
+    | awk -F',' '{print $1","$2}'
+  )
+
+  # Build maps for English subtitle streams (GLOBAL stream index)
+  map_eng_subs=()
+  while IFS=',' read -r gidx lang; do
+    [ -n "${gidx:-}" ] || continue
+    case "${lang,,}" in
+      eng|en) map_eng_subs+=(-map "0:${gidx}") ;;
+    esac
+  done < <(
+    ffprobe -v error -select_streams s \
+      -show_entries stream=index:stream_tags=language \
+      -of csv=p=0 "$f" 2>/dev/null \
+    | awk -F',' '{print $1","$2}'
+  )
+
+  ffmpeg -hide_banner -stats \
+    -probesize 200M -analyzeduration 200M \
+    -hwaccel cuda -hwaccel_output_format cuda -i "$f" \
+    -map "0:v:0" \
+    -map "0:a:0" \
+    "${map_extra_audio[@]}" \
+    "${map_eng_subs[@]}" \
+    -vf "scale_cuda=1920:-2:force_original_aspect_ratio=decrease,hwdownload,format=nv12" \
+    -c:v hevc_nvenc -preset slow -tune hq -rc vbr_hq \
+    -b:v "$vb" -maxrate "$vb" -bufsize "$buf" \
+    -c:a ac3 -b:a "$ab" \
+    -c:s copy \
+    "$out"
+done
+
+if [ "$found" -eq 0 ]; then
+  echo "No video files found in $(pwd)"
+fi
