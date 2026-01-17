@@ -12,7 +12,7 @@ Dependencies: ffmpeg, nvidia-driver, nvenc, nvdec (sudo apt install...)<br>
 <li>Output: 
   <ul><li>mkv, 1080p
   <li>{original_file_name}.1080p.hevc_nvenc.w1920.mkv</li></li></ul>
-<b>Installation:</b>
+<br><b>Installation:</b>
 <br>git clone …
 <br>sudo install -m 755 videoconvert /usr/local/bin/videoconvert
 <br>cd /path/to/movies && videoconvert
