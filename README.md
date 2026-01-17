@@ -6,11 +6,12 @@ Dependencies: ffmpeg, nvidia-driver, nvenc, nvdec (sudo apt install...)<br>
 <br><br>Does ffmpeg support CUDA scaling?
 <br>ffmpeg -hide_banner -filters | grep -E 'scale_cuda|hwupload_cuda'
 <ul><li>Inputs: all mkv,mp4,mov,avi,ts,m4v,or webm in the specified or current folder</li>
-<li>Video format: h265, 1920 max width (maintains aspect ratio)</li>
-<li>Audio streams: Keeps audio stream 0 (first one), and any other audio streams in English.</li>
+<li>Video format: h265 via NVENC, 1920 max width (maintains aspect ratio)</li>
+<li>Audio stream handling: Keeps audio stream 0 (first one), and any other audio streams in English.</li>
 <li>Audio format: Converts multistream audio to 384kbps DD5.1; stereo/mono to 192kbps</li>
-<li>Output: 
-  <ul><li>mkv, 1080p
+<li>Subtitle handling: Keeps all English language subtitles, discards the rest</li></ul>
+Output: 
+  <ul><li>File type: mkv
   <li>{original_file_name}.1080p.hevc_nvenc.w1920.mkv</li></li></ul>
 <br><b>Installation:</b>
 <br>git clone …
