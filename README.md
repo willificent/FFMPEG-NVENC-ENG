@@ -4,7 +4,7 @@ Dependencies: ffmpeg, nvidia-driver, nvenc, nvdec (sudo apt install...)<br>
 <li>Video format: h265, 1920 max width (maintains aspect ratio)</li>
 <li>Audio streams: Keeps audio stream 0 (first one), and any other audio streams in English.</li>
 <li>Audio format: Converts multistream audio to 384kbps DD5.1; stereo/mono to 192kbps</li>
-<li>Output: mkv, 1080p</li></ul><br>
+<li>Output: mkv, 1080p</li></ul>
 Installation: 
 <ul><li>Install the script: /usr/local/bin/{yourfilename}</li>
 <li>chmod +x /usr/local/bin/{yourfilename}</li></ul>
