@@ -1,7 +1,7 @@
 <b>videoconvert</b> is a BASH script for converting large video files with lots of extra "junk" to a compact 1GB/hour x265 video stream with only the original language audio in DD5.1 or stereo, any additional English audio streams, and English subtitles. (Discards everything else) This script is GPU accelerated for encode, decode, and scale using the available Nvidia libraries in the nvidia-driver and associated packages.<br><br>
 Dependencies: ffmpeg, nvidia-driver, nvenc, nvdec (sudo apt install...)<br>
-Compatibility check:
-<br>Does ffmpeg have access to the encoders? 
+<br>Compatibility check:
+<br><br>Does ffmpeg have access to the encoders? 
 <br>ffmpeg -hide_banner -encoders | grep -E 'hevc_nvenc'
 <br><br>Does ffmpeg support CUDA scaling?
 <br>ffmpeg -hide_banner -filters | grep -E 'scale_cuda|hwupload_cuda'
