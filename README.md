@@ -6,6 +6,6 @@ Dependencies: ffmpeg, nvidia-driver, nvenc, nvdec (sudo apt install...)<br>
 <li>Audio format: Converts multistream audio to 384kbps DD5.1; stereo/mono to 192kbps</li>
 <li>Output: mkv, 1080p</li></ul>
 <b>Installation:</b>
-git clone …
-sudo install -m 755 videoconvert /usr/local/bin/videoconvert
-cd /path/to/movies && videoconvert
+<br>git clone …
+<br>sudo install -m 755 videoconvert /usr/local/bin/videoconvert
+<br>cd /path/to/movies && videoconvert
