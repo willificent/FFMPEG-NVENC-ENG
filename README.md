@@ -11,7 +11,7 @@ Dependencies: ffmpeg, nvidia-driver, nvenc, nvdec (sudo apt install...)<br>
 <li>Audio format: Converts multistream audio to 384kbps DD5.1; stereo/mono to 192kbps</li>
 <li>Output: 
   <ul><li>mkv, 1080p
-  <ul><li>original_file_name.x265.</li></li></ul>
+  <li>{original_file_name}.1080p.hevc_nvenc.w1920.mkv</li></li></ul>
 <b>Installation:</b>
 <br>git clone …
 <br>sudo install -m 755 videoconvert /usr/local/bin/videoconvert
