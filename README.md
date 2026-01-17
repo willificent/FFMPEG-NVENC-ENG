@@ -1,9 +1,8 @@
-videoconvert is a BASH script for converting large video files with lots of extra "junk" to a smaller file size with only the original language audio, and any English audio and subtitles. (Discards everything else)<br><br><br>
-Inputs: any mkv,mp4,mov,avi,ts,m4v,or webm in the current folder <br>
-Video format: h265, 1920 max width (maintains aspect ratio)
-Audio streams: Keeps audio stream 0 (first one), and any other audio streams in English.
-Audio format: Converts multistream audio to 384kbps DD5.1; stereo/mono to 192kbps
-
+videoconvert is a BASH script for converting large video files with lots of extra "junk" to a smaller file size with only the original language audio, and any English audio and subtitles. (Discards everything else)<br><br>
+Inputs: any mkv,mp4,mov,avi,ts,m4v,or webm in the current folder <br><br>
+<ul><li>Video format: h265, 1920 max width (maintains aspect ratio)</li>
+<li>Audio streams: Keeps audio stream 0 (first one), and any other audio streams in English.</li>
+<li>Audio format: Converts multistream audio to 384kbps DD5.1; stereo/mono to 192kbps</li></ul><br><br>
 Output: mkv, 1080p
 
 Installation: 
