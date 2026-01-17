@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 set -euo pipefail
 shopt -s nullglob
 
@@ -12,7 +11,7 @@ for f in *.{mkv,mp4,mov,avi,ts,m4v,webm}; do
   out="${base}.hevc_nvenc.w1920.mkv"
 
   if [ -e "$out" ]; then
-    echo "Skipping (exists): $out"
+    echo "⏩ Skipping (exists): $out"
     continue
   fi
 
@@ -70,6 +69,7 @@ for f in *.{mkv,mp4,mov,avi,ts,m4v,webm}; do
   ffmpeg -hide_banner -stats \
     -probesize 200M -analyzeduration 200M \
     -hwaccel cuda -hwaccel_output_format cuda -i "$f" \
+    -fps_mode passthrough -fix_sub_duration -max_interleave_delta 0 \
     -map "0:v:0" \
     -map "0:a:0" \
     "${map_extra_audio[@]}" \
